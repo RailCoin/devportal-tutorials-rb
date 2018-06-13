@@ -8,7 +8,7 @@ First, we ask the blockchain for the active votes on a post or comment.  Then, w
 
 Then, we sort the votes by `rshares` to find the top voter.
 
-# To Run
+### To Run
 
 First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
 

@@ -12,7 +12,7 @@ It also counts the words in the content body by splitting the text into an array
 
 Finally, it creates the canonical URL by combining `parent_permlink`, `author`, and `permlink`.
 
-# To Run
+### To Run
 
 First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
 

@@ -29,7 +29,7 @@ For each post we retrieve, we are going to build up a summary to display the int
 * Number of words in the body
 * Canonical URL
 
-# To Run
+### To Run
 
 First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
 

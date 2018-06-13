@@ -1,15 +1,4 @@
----
-title: Submit a New Post
-position: 5
-exclude: true
-layout: main-script
-description: Broadcast a new top level post.
-main_script: tutorials-ruby/submit_a_new_post.rb
-main_type: ruby
-main_script_anchor: Script
----
-
-### Intro
+# Submit a New Post
 
 This example will broadcast a new post to the blockchain using the values provided.  To create a post in `ruby`, we will use a `Radiator::Transaction` containing a `comment` operation, which is how all content is stored internally.
 
@@ -27,7 +16,7 @@ You should change `wif` to the posting key that matches your `author`.  This scr
 * `body` - The actual content of the post.
 * `json_metadata` - JSON containing all of the tags.
 
-# To Run
+### To Run
 
 First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
 

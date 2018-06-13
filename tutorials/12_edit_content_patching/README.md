@@ -26,7 +26,7 @@ As stated earlier, you will need to change `broadcast` to `true`.  You can also 
 * `title` - Title of the post.
 * `permlink` - Leave this if the `permlink` is derived from the title or set it to the original `permlink` if you want to modify the title independently from the `permlink`.
 
-# To Run
+### To Run
 
 First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
 
