@@ -12,6 +12,7 @@ The tutorials build on each other. It's suggested you go through them in-order.
 ## Tutorial List
 
 1.  [Blog Feed](tutorials/01_blog_feed) - Pull the list of a user's posts from the blockchain
+11. [Submit Comment Reply](tutorials/11_submit_comment_reply) - Broadcast a reply to the blockchain using the values provided
 
 ## To Run one of the tutorials
 
