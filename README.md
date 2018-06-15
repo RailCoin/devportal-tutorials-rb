@@ -11,6 +11,7 @@ The tutorials build on each other. It's suggested you go through them in-order.
 
 ## Tutorial List
 
+0. [Getting Started](tutorials/00_getting_started) - Common tasks for getting ruby apps to access the blockchain
 1.  [Blog Feed](tutorials/01_blog_feed) - Pull the list of a user's posts from the blockchain
 
 ## To Run one of the tutorials
