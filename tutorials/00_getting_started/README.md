@@ -73,3 +73,7 @@ options = {
 }
 api = Radiator::Api.new(options)
 ```
+
+### Next Step
+
+If you'd like to dive right into the first tutorial, have a look at: [Blog Feed](https://github.com/steemit/devportal-tutorials-rb/tree/master/tutorials/01_blog_feed)
