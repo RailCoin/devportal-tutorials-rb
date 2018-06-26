@@ -1,5 +1,9 @@
 # Submit Comment Reply
 
+_By the end of this tutorial you should know how to prepare comments for Steem and then submit using Radiator._
+
+### Intro
+
 This example will broadcast a reply to the blockchain using the values provided.  To create a post in `ruby`, we will use a `Radiator::Transaction` containing a `comment` operation, which is how all content is stored internally.
 
 A reply is differentiated from a post by whether or not a `parent_author` exists. When there is no `parent_author`, then it's a post, otherwise it's a comment (like in this example).
