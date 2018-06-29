@@ -70,7 +70,7 @@ First, set up your workstation using the steps provided in [Getting Started](htt
 
 ```bash
 git clone git@github.com:steemit/devportal-tutorials-rb.git
-cd devportal-tutorials-rb/tutorials/TODO
+cd devportal-tutorials-rb/tutorials/05_get_post_details
 bundle install
 ruby get_post_details.rb https://steemit.com/steemdev/@steemitdev/announcing-the-steem-developer-portal
 ```
