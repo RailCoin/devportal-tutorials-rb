@@ -8,23 +8,55 @@ The purpose of this tutorial is fetch the contents of a specified post to get an
 
 We will also explain the most commonly used fields from the response object.
 
+### Sections
+
+1. [Post Content](#post-content) - General use of the method to determine ...
+  1. [`parent_author`](#parent_author) - if the content is a root post or reply
+  2. [`last_update` and `created`](#last_update-and-created) - if the content has been modified
+  3. [`cashout_time`](#cashout_time) - if the content has reached payout
+  4. [`beneficiaries`](#beneficiaries) - reward routes other accounts
+  5. [`active_votes`](#active_votes) - all votes applied
+  6. [`json_metadata`](#json_metadata) - things like `tags` and `app`
+2. [Script](#script) - Delving into the example script.
+3. [To Run](#to-run) - Running the example.
+
 ### Post content
 
 Most console applications that use the `get_content` method are probably looking for the `body` to parse.  But there are many other fields to look at.  Let's break them down by use:
 
 #### `parent_author`
 
-Your application can determine if the content is a root post or reply by looking at the `parent_author` field.  If it's empty, then you're working with a root post, otherwise, it's a reply.
+In our script (`get_post_details.rb`), we use the ruby statement:
+
+```ruby
+content.parent_author.empty?
+```
+
+With the above idiom, your application can determine if the content is a root post or reply.  If it's empty, then you're working with a root post, otherwise, it's a reply.
 
 Once you know you're dealing with a reply, other fields can be useful for additional details.  For instance, `root_author`, `root_permlink`, and `root_title` can be used to figure out what the original post details are, even if the reply is deeply nested.
 
 #### `last_update` and `created`
 
-If you'd like to determine if the content has been modified since it was originally posted, you can check `last_update` and `created`.  If they are the same, then there has been no modification.
+In our script, we use the ruby statement:
+
+```ruby
+content.last_update == content.created
+```
+
+With the above idiom, your application can determine if the content has been modified since it was originally posted.  If they are the same, then there has been no modification.
 
 #### `cashout_time`
 
-You can use `cashout_time` to determine if the content has reached payout.  If `cashout_time` is in the future, the content has not been paid yet.  You can determine the possible future payout by inspecting `pending_payout_value`.
+In our script, we use the ruby statement:
+
+```ruby
+(cashout = Time.parse(content.cashout_time + 'Z') - Time.now.utc) > 0
+```
+
+With the above idiom, you can use `cashout_time` to determine if the content has reached payout.  If `cashout_time` is in the future, the content has not been paid yet.  You can determine the possible future payout by inspecting `pending_payout_value`.
+
+You will note that we must parse the string found in `content.cashout_time` by appending `Z` (Zulu Time, aka UTC) in order for `Time.parse` to get the right timezone.
 
 Even before payout, you can determine what the `max_accepted_payout` is.  Most often, this is set to one of two values by the author:
 
@@ -40,15 +72,57 @@ Once the payout time has arrived, it's possible to determine the split between a
 
 #### `beneficiaries`
 
+In our script, we use the ruby statement:
+
+```ruby
+content.beneficiaries.any?
+```
+
 Some content will have a `beneficiaries` array.  This is used to determine reward routes any account, up to eight.  Payouts are in STEEM Power and are expressed as a reward percentage of the author reward.
+
+To display a list of who the beneficiaries are, use the following ruby code, as seen in the example:
+
+```ruby
+content.beneficiaries.each do |beneficiary|
+  puts "\t\t#{beneficiary.account}: #{'%.2f %' % (beneficiary.weight / 100.0)}"
+end
+```
+
+Note, if you just want an array of beneficiary account names, this will work in a pinch:
+
+```ruby
+accounts = content.beneficiaries.map do |beneficiary|
+  beneficiary.account
+end
+```
 
 #### `active_votes`
 
-The `active_votes` field is an array that shows all votes applied to the content, including upvotes, downvotes, and unvotes (where a vote previously cast is revoked).
+In our script, we use the ruby statements:
+
+```ruby
+votes = content.active_votes
+upvotes = votes.select { |v| v.percent > 0 }.size
+downvotes = votes.select { |v| v.percent < 0 }.size
+unvotes = votes.select { |v| v.percent == 0 }.size
+top_voter = votes.sort_by { |v| v.rshares.to_i }.last.voter
+```
+
+The above idiom splits all vote types and identifies the top voter.  This is because the `active_votes` field is an array that shows all votes applied to the content, including upvotes, downvotes, and unvotes (where a vote previously cast is revoked).
 
 #### `json_metadata`
 
-The `json_metadata` is a string of JSON that can be parsed to determine things like `tags` and `app`.  Other data may be present, depending on the application that created the content.
+In our script, we use the ruby statements:
+
+```ruby
+metadata = JSON[content.json_metadata || '{}'] rescue {}
+tags = metadata['tags'] || []
+app = metadata['app']
+```
+
+As you can see from the above example, `json_metadata` starts out as a string of JSON that can be parsed to determine things like `tags` and `app`.  Other data may be present, depending on the application that created the content.
+
+Note, we're using `rescue` in case the `json_metadata` string contains invalid JSON because there is no validation performed on this field by the blockchain when content is broadcasted.
 
 ### Script
 
@@ -58,24 +132,21 @@ To request content to work with, we're using the `get_content` method:
 api = Radiator::Api.new
 
 api.get_content(author, permlink) do |content|
-  # work with content
+  # .
+  # .
+  # .
 end
 ```
 
-Now we have a `content` object to inspect.  This script reads the content and displays a summary of the fields.  For example, we can get the of a post from `content.title`.
+Now we have a `content` object to inspect.  The example (`get_post_details.rb`) script reads the content and displays a summary of the fields.  For example, we can get the of a post from `content.title`.
 
-### To Run
-
-First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
+#### Example
 
 ```bash
-git clone git@github.com:steemit/devportal-tutorials-rb.git
-cd devportal-tutorials-rb/tutorials/05_get_post_details
-bundle install
 ruby get_post_details.rb https://steemit.com/steemdev/@steemitdev/announcing-the-steem-developer-portal
 ```
 
-### Example Output
+#### Example Output
 
 ```
 Post by steemitdev
@@ -104,4 +175,15 @@ Post by steemitdev
 	author_reputation: 14487360227924
 	tags: steemdev, steem, dev
 	app: steemit/0.1
+```
+
+### To Run
+
+First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
+
+```bash
+git clone git@github.com:steemit/devportal-tutorials-rb.git
+cd devportal-tutorials-rb/tutorials/05_get_post_details
+bundle install
+ruby get_post_details.rb <content-url>
 ```
