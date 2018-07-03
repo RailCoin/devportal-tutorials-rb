@@ -1,28 +1,93 @@
 # How to Get Post Details
 
-Explaining the most commonly used fields of the requested content.
+Understand and use the most common fields of the requested content.
 
 ### Intro
 
-The purpose of this tutorial is fetch the contents of a specified post to get an overview of all data related to that post.
+This tutorial fetches the contents of a single post and explains all data related to that post.
 
-We will also explain the most commonly used fields from the response object.
+We will also describe the most commonly used fields from the response object.
 
 ### Sections
 
-1. [Post Content](#post-content) - General use of the method to determine ...
-  1. [`parent_author`](#parent_author) - if the content is a root post or reply
-  2. [`last_update` and `created`](#last_update-and-created) - if the content has been modified
-  3. [`cashout_time`](#cashout_time) - if the content has reached payout
-  4. [`beneficiaries`](#beneficiaries) - reward routes other accounts
-  5. [`active_votes`](#active_votes) - all votes applied
-  6. [`json_metadata`](#json_metadata) - things like `tags` and `app`
+1. [Making the api call](#making-the-api-call) - Use steem-rb to a specific post
+    1. [Example api call](#example-api-call) - make the call in code
+    1. [Example api call using script](#example-api-call-using-script) - using our tutorial script
+    1. [Example Output](#example-output) - output from a successful call
+1. [Post Fields](#post-fields) - General use of the method to determine ...
+    1. [`parent_author`](#parent_author) - if the content is a root post or reply
+    1. [`last_update` and `created`](#last_update-and-created) - if the content has been modified
+    1. [`cashout_time`](#cashout_time) - if the content has reached payout
+    1. [`beneficiaries`](#beneficiaries) - reward routes other accounts
+    1. [`active_votes`](#active_votes) - all votes applied
+    1. [`json_metadata`](#json_metadata) - things like `tags` and `app`
 2. [Script](#script) - Delving into the example script.
 3. [To Run](#to-run) - Running the example.
 
-### Post content
+### Making the api call
 
-Most console applications that use the `get_content` method are probably looking for the `body` to parse.  But there are many other fields to look at.  Let's break them down by use:
+To request a specific post we use the `get_content` method:
+
+```ruby
+api = Radiator::Api.new
+
+api.get_content(author, permlink) do |content|
+  # .
+  # ... your code here
+  # .
+end
+```
+
+#### Example api call
+If we want to get the post "announcing-the-steem-developer-portal" by user @steemitdev
+```ruby
+api.get_content("steemitdev", "announcing-the-steem-developer-portal") do |content| ...
+```
+
+#### Example api call using script
+And to do the same with our tutorial script
+```bash
+ruby get_post_details.rb https://steemit.com/steemdev/@steemitdev/announcing-the-steem-developer-portal
+```
+
+#### Example Output
+
+From the example we get the following output from our script
+
+```
+Post by steemitdev
+	title: Announcing the Steem Developer Portal!
+	permlink: announcing-the-steem-developer-portal
+	category: steemdev
+	body_length: 2342 (381 words)
+	posted at: 2017-10-30T16:34:27, updated at: 2017-10-30T16:34:27, active at: 2018-04-11T10:34:00
+	children: 66
+	net_rshares: 0
+	vote_rshares: 0
+	payout:
+		max_accepted_payout: 0.000 SBD
+		percent_steem_dollars: 100.00 %
+		payout at: 2017-11-06T16:34:27 (235.2 days ago)
+		author_rewards: 0.000 SBD
+		curator_payout_value: 0.000 SBD
+		total_payout_value: 0.000 SBD
+	promoted: 0.000 SBD
+	total_vote_weight: 0
+	reward_weight: 100.00 %
+	net_votes: 181, upvotes: 234, downvotes: 1, unvotes: 0, total: 235, top voter: thejohalfiles
+	allow_replies: true
+	allow_votes: true
+	allow_curation_rewards: true
+	author_reputation: 14487360227924
+	tags: steemdev, steem, dev
+	app: steemit/0.1
+```
+
+
+
+### Post fields
+
+Most console applications that use the `get_content` method are probably looking for the `body` field.  But there are many other fields to look at.  Let's break them down by use:
 
 #### `parent_author`
 
@@ -124,62 +189,12 @@ As you can see from the above example, `json_metadata` starts out as a string of
 
 Note, we're using `rescue` in case the `json_metadata` string contains invalid JSON because there is no validation performed on this field by the blockchain when content is broadcasted.
 
-### Script
-
-To request content to work with, we're using the `get_content` method:
-
-```ruby
-api = Radiator::Api.new
-
-api.get_content(author, permlink) do |content|
-  # .
-  # .
-  # .
-end
-```
-
-Now we have a `content` object to inspect.  The example (`get_post_details.rb`) script reads the content and displays a summary of the fields.  For example, we can get the of a post from `content.title`.
-
-#### Example
-
-```bash
-ruby get_post_details.rb https://steemit.com/steemdev/@steemitdev/announcing-the-steem-developer-portal
-```
-
-#### Example Output
-
-```
-Post by steemitdev
-	title: Announcing the Steem Developer Portal!
-	permlink: announcing-the-steem-developer-portal
-	category: steemdev
-	body_length: 2342 (381 words)
-	posted at: 2017-10-30T16:34:27, updated at: 2017-10-30T16:34:27, active at: 2018-04-11T10:34:00
-	children: 66
-	net_rshares: 0
-	vote_rshares: 0
-	payout:
-		max_accepted_payout: 0.000 SBD
-		percent_steem_dollars: 100.00 %
-		payout at: 2017-11-06T16:34:27 (235.2 days ago)
-		author_rewards: 0.000 SBD
-		curator_payout_value: 0.000 SBD
-		total_payout_value: 0.000 SBD
-	promoted: 0.000 SBD
-	total_vote_weight: 0
-	reward_weight: 100.00 %
-	net_votes: 181, upvotes: 234, downvotes: 1, unvotes: 0, total: 235, top voter: thejohalfiles
-	allow_replies: true
-	allow_votes: true
-	allow_curation_rewards: true
-	author_reputation: 14487360227924
-	tags: steemdev, steem, dev
-	app: steemit/0.1
-```
 
 ### To Run
 
 First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
+
+*`<content-url>` 
 
 ```bash
 git clone git@github.com:steemit/devportal-tutorials-rb.git
@@ -187,3 +202,4 @@ cd devportal-tutorials-rb/tutorials/05_get_post_details
 bundle install
 ruby get_post_details.rb <content-url>
 ```
+
