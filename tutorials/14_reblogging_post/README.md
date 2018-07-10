@@ -10,6 +10,7 @@ For this operation, we will use `custom_json` and a properly formed id and paylo
     1. [Example api call](#example-api-call) - make the call in code
     1. [Example api call using script](#example-api-call-using-script) - using our tutorial script
     1. [Example Output](#example-output) - output from a successful call
+    1. [Example Error](#example-error) - error output from a unsuccessful call
 1. [Custom JSON Fields](#custom-json-fields) - understanding the result
 1. [To Run](#to-run) - Running the example.
 
@@ -77,6 +78,188 @@ From the example we get the following output from our script:
 ```
 
 The response we get after broadcasting the transaction gives us the transaction id ([`0aa41e0...`](https://steemd.com/tx/0aa41e06b2612315d32cadeb671eb1201f266dd7)), block number ([`24063620`](https://steemd.com/b/24063620)), and the transaction number of that block (`19`).
+
+### Example Error
+
+If a post has already been reblogged by the account, we will get back an error:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "error": {
+    "code": -32000,
+    "message": "Assert Exception:blog_itr == blog_comment_idx.end(): Account has already reblogged this post",
+    "data": {
+      "code": 10,
+      "name": "assert_exception",
+      "message": "Assert Exception",
+      "stack": [
+        {
+          "context": {
+            "level": "error",
+            "file": "follow_evaluators.cpp",
+            "line": 143,
+            "method": "do_apply",
+            "hostname": "",
+            "timestamp": "2018-07-10T21:33:11"
+          },
+          "format": "blog_itr == blog_comment_idx.end(): Account has already reblogged this post",
+          "data": {
+          }
+        },
+        {
+          "context": {
+            "level": "warn",
+            "file": "follow_evaluators.cpp",
+            "line": 216,
+            "method": "do_apply",
+            "hostname": "",
+            "timestamp": "2018-07-10T21:33:11"
+          },
+          "format": "",
+          "data": {
+            "o": {
+              "account": "social",
+              "author": "inertia",
+              "permlink": "kinda-spooky"
+            }
+          }
+        },
+        {
+          "context": {
+            "level": "warn",
+            "file": "generic_custom_operation_interpreter.hpp",
+            "line": 195,
+            "method": "apply",
+            "hostname": "",
+            "timestamp": "2018-07-10T21:33:11"
+          },
+          "format": "",
+          "data": {
+            "outer_o": {
+              "required_auths": [
+
+              ],
+              "required_posting_auths": [
+                "social"
+              ],
+              "id": "follow",
+              "json": "[\"reblog\",{\"account\":\"social\",\"author\":\"inertia\",\"permlink\":\"kinda-spooky\"}]"
+            }
+          }
+        },
+        {
+          "context": {
+            "level": "warn",
+            "file": "database.cpp",
+            "line": 3221,
+            "method": "_apply_transaction",
+            "hostname": "",
+            "timestamp": "2018-07-10T21:33:11"
+          },
+          "format": "",
+          "data": {
+            "op": {
+              "type": "custom_json_operation",
+              "value": {
+                "required_auths": [
+
+                ],
+                "required_posting_auths": [
+                  "social"
+                ],
+                "id": "follow",
+                "json": "[\"reblog\",{\"account\":\"social\",\"author\":\"inertia\",\"permlink\":\"kinda-spooky\"}]"
+              }
+            }
+          }
+        },
+        {
+          "context": {
+            "level": "warn",
+            "file": "database.cpp",
+            "line": 3227,
+            "method": "_apply_transaction",
+            "hostname": "",
+            "timestamp": "2018-07-10T21:33:11"
+          },
+          "format": "",
+          "data": {
+            "trx": {
+              "ref_block_num": 12404,
+              "ref_block_prefix": 1445149887,
+              "expiration": "2018-07-10T21:43:09",
+              "operations": [
+                {
+                  "type": "custom_json_operation",
+                  "value": {
+                    "required_auths": [
+
+                    ],
+                    "required_posting_auths": [
+                      "social"
+                    ],
+                    "id": "follow",
+                    "json": "[\"reblog\",{\"account\":\"social\",\"author\":\"inertia\",\"permlink\":\"kinda-spooky\"}]"
+                  }
+                }
+              ],
+              "extensions": [
+
+              ],
+              "signatures": [
+                "1c063e22868f107dbafaa0452d86cfe19894f2f7fc3ea46b5c73dc7906edcd88244548f001c1d128aa07f862819e80e2f46b6cd74c6769d1d48ef4ad1f147b4dab"
+              ]
+            }
+          }
+        },
+        {
+          "context": {
+            "level": "warn",
+            "file": "database.cpp",
+            "line": 788,
+            "method": "push_transaction",
+            "hostname": "",
+            "timestamp": "2018-07-10T21:33:11"
+          },
+          "format": "",
+          "data": {
+            "trx": {
+              "ref_block_num": 12404,
+              "ref_block_prefix": 1445149887,
+              "expiration": "2018-07-10T21:43:09",
+              "operations": [
+                {
+                  "type": "custom_json_operation",
+                  "value": {
+                    "required_auths": [
+
+                    ],
+                    "required_posting_auths": [
+                      "social"
+                    ],
+                    "id": "follow",
+                    "json": "[\"reblog\",{\"account\":\"social\",\"author\":\"inertia\",\"permlink\":\"kinda-spooky\"}]"
+                  }
+                }
+              ],
+              "extensions": [
+
+              ],
+              "signatures": [
+                "1c063e22868f107dbafaa0452d86cfe19894f2f7fc3ea46b5c73dc7906edcd88244548f001c1d128aa07f862819e80e2f46b6cd74c6769d1d48ef4ad1f147b4dab"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "id": 3
+}
+```
+
+This indicates that the operation was not included in the blockchain because it was already reblogged in the past.
 
 ### Custom JSON Fields
 
