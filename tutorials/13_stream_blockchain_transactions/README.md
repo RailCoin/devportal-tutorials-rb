@@ -48,6 +48,12 @@ The script will allow multiple operation types:
 ruby stream_blockchain_transactions.rb head ops comment vote
 ```
 
+Virtual operations are also allowed, but make sure to pass `irreversible` instead of `head`:
+
+```bash
+ruby stream_blockchain_transactions.rb irreversible ops producer_reward author_reward
+```
+
 Or, if you pass no operation types, the script will stream all types:
 
 ```bash
