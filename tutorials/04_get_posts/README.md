@@ -1,4 +1,4 @@
-### Get Posts by Category
+# Get Posts by Category
 
 This example will output posts depending on which category is provided as the arguments.
 
