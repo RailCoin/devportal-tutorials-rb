@@ -1,6 +1,6 @@
 # Reblogging Post
 
-To reblog ("resteem") a post, we can use a custom json operation that is handled by the follow plugin.
+To reblog ('resteem') a post, we can use a custom json operation that is handled by the follow plugin.
 
 For this operation, we will use `custom_json` and a properly formed id and payload so that `follow_plugin` will pick up the reblog data and display the selected post in the feed of the account doing the reblog.
 
