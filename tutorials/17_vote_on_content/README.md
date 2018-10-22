@@ -193,9 +193,10 @@ Broadcasting a `vote` operation will require the following fields:
 
 ### To Run
 
-First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository):
+First, set up your workstation using the steps provided in [Getting Started](https://developers.steem.io/tutorials-ruby/getting_started).  Then you can create and execute the script (or clone from this repository) with the following arguments:
 
-* `<url>`
+* `<url>` - the URL to vote on
+* `[weight]` - the weight of the vote as percentage, optional (default `100.0 %`)
 
 ```bash
 git clone git@github.com:steemit/devportal-tutorials-rb.git
