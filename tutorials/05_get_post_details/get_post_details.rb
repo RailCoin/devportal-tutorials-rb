@@ -66,7 +66,7 @@ api.get_content(author, permlink) do |content|
   
   # The percent of Steem Dollars to keep, unkept amounts will be received as
   # STEEM Power.
-  puts "\t\tpercent_steem_dollars: #{'%.2f %' % (content.percent_steem_dollars / 100.0)}"
+  puts "\t\tpercent_steem_dollars: #{'%.2f %%' % (content.percent_steem_dollars / 100.0)}"
     
   # 7 days from the created date.
   if (cashout = Time.parse(content.cashout_time + 'Z') - Time.now.utc) > 0
@@ -108,7 +108,7 @@ api.get_content(author, permlink) do |content|
     puts "\tbeneficiaries:"
     
     content.beneficiaries.each do |beneficiary|
-      puts "\t\t#{beneficiary.account}: #{'%.2f %' % (beneficiary.weight / 100.0)}"
+      puts "\t\t#{beneficiary.account}: #{'%.2f %%' % (beneficiary.weight / 100.0)}"
     end
   end
   
@@ -117,7 +117,7 @@ api.get_content(author, permlink) do |content|
   puts "\ttotal_vote_weight: #{content.total_vote_weight}"
   
   # Weight/percent of reward.
-  puts "\treward_weight: #{'%.2f %' % (content.reward_weight / 100.0)}"
+  puts "\treward_weight: #{'%.2f %%' % (content.reward_weight / 100.0)}"
   
   # Net positive votes
   print "\tnet_votes: #{content.net_votes}"
